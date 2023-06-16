@@ -1,0 +1,25 @@
+<h3>partition</h3>
+
+<div class="">
+  <strong>
+    partition(Observable, () => boolean): [Observable&lt;any&gt;,
+    Observable&lt;any&gt;]
+  </strong>
+  <hr />
+</div>
+<div class="">
+  agisce su un Observable dividendolo in 2 Observable in base ad una condizione
+  booleana<br />
+  <hr />
+  <strong>obs</strong>: [1, 2, 3, 4, 5, 6]<br />
+  <strong>condition</strong>: val => val % 2 === 0<br />
+  <strong>obs1</strong>: [2, 4, 6]<br />
+  <strong>obs2</strong>: [1, 3, 5]<br />
+</div>
+
+<img [src]="img" [style.width]="'35rem'" />
+<hr />
+<div *ngIf="loading">
+  <i class="fas fa-spinner fa-spin"></i>
+</div>
+{{ message }}

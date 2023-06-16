@@ -1,0 +1,58 @@
+<h3>combineLatest</h3>
+
+<div class="">
+  <strong> combineLatest(...Observable): Observable&lt;any[]&gt; </strong>
+  <hr />
+</div>
+<div class="">
+  Sta in ascolto di più Observable<br />
+  quando tutti hanno emesso e se poi uno di loro emette un valore<br />
+  recupera gli ultimi valori emessi da ogni Observable<br />
+  <hr />
+  <strong>obs1</strong>: [1, 2, 3, 4] every 1 sec<br />
+  <strong>obs2</strong>: [a, b, c] every 2 sec<br />
+  <br />
+  <i>dopo 1 secondo obs1 => 1</i>
+  <strong> (ancora non hanno emesso entrambi)</strong><br />
+  <i>dopo 2 secondi obs1 => 2 e obs2 => a</i><br />
+  <i>dopo 3 secondi obs1 => 3</i><br />
+  <i>dopo 4 secondi obs1 => 4 e obs2 => b</i><br />
+  <i>dopo 5 secondi</i> <strong> (non succede niente)</strong><br />
+  <i>dopo 6 secondi obs2 => c</i><br />
+  <!--
+  <strong>obs1</strong>: [0]<br />
+  <strong>obs2</strong>: [a]<br />
+  <strong>change1 => obs1</strong>: [1]<br />
+  <strong>change2 => obs2</strong>: [b]<br />
+  <strong>changeDelay => obs1 and after 5 sec obs2</strong>: [2] and after 5 sec
+  [c]<br />
+  -->
+</div>
+
+<img [src]="img" [style.width]="'35rem'" />
+
+<div>
+  <a (click)="start()" class="btn btn-xs btn-primary">
+    <span>restart</span>
+  </a>
+</div>
+<!--
+<hr />
+
+<a (click)="change1('1')" style="margin: 1rem; cursor: pointer">
+  <span>change1</span>
+</a>
+
+<a (click)="change2('b')" style="margin: 1rem; cursor: pointer">
+  <span>change2</span>
+</a>
+
+<a (click)="changeDelay('2', 'c')" style="margin: 1rem; cursor: pointer">
+  <span>change1AndThen2</span>
+</a>
+-->
+<hr />
+<div *ngIf="loading">
+  <i class="fas fa-spinner fa-spin"></i>
+</div>
+<div [innerHTML]="message"></div>

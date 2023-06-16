@@ -1,0 +1,34 @@
+<h3>merge</h3>
+
+<div class="">
+  <strong> merge(...Observable): Observable&lt;any&gt; </strong>
+  <hr />
+</div>
+<div class="">
+  Sta in ascolto di più Observable<br />
+  prende tutti i valori emessi da ognuno<br />
+  recupera il valore dell'Observable che emette al tempo T<br />
+  <hr />
+  <strong>obs1</strong>: [1, 2, 3, 4] every 1 sec<br />
+  <strong>obs2</strong>: [a, b, c] every 2 sec<br />
+  <br />
+  <i>dopo 1 secondo obs1 => 1</i><br />
+  <i>dopo 2 secondi obs1 => 2 e obs2 => a</i><br />
+  <i>dopo 3 secondi obs1 => 3</i><br />
+  <i>dopo 4 secondi obs1 => 4 e obs2 => b</i><br />
+  <i>dopo 5 secondi</i> <strong> (non succede niente)</strong><br />
+  <i>dopo 6 secondi obs2 => c</i><br />
+</div>
+
+<img [src]="img" [style.width]="'35rem'" />
+
+<div>
+  <a (click)="start()" class="btn btn-xs btn-primary">
+    <span>restart</span>
+  </a>
+</div>
+<hr />
+<div *ngIf="loading">
+  <i class="fas fa-spinner fa-spin"></i>
+</div>
+<div [innerHTML]="message"></div>

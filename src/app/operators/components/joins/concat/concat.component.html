@@ -1,0 +1,35 @@
+<h3>concat</h3>
+
+<div class="">
+  <strong> concat(...Observable): Observable&lt;any&gt; </strong>
+  <hr />
+</div>
+<div class="">
+  Sta in ascolto di più Observable e li esegue in sequenza<br />
+  quando il primo ha finito inizia con il secondo<br />
+  recupera i valori emessi dal primo e poi quelli del secondo<br />
+  <hr />
+  <strong>obs1</strong>: [1, 2, 3, 4] every 1 sec<br />
+  <strong>obs2</strong>: [a, b, c] every 2 sec<br />
+  <br />
+  <i>dopo 1 secondo obs1 => 1 e obs2 => SPENTO</i><br />
+  <i>dopo 2 secondi obs1 => 2 e obs2 => SPENTO</i><br />
+  <i>dopo 3 secondi obs1 => 3 e obs2 => SPENTO</i><br />
+  <i>dopo 4 secondi obs1 => 4 e obs2 => SPENTO</i><br />
+  <i>dopo 5 secondi obs2 => a</i><br />
+  <i>dopo 7 secondi obs2 => b</i><br />
+  <i>dopo 9 secondi obs2 => c</i><br />
+</div>
+
+<img [src]="img" [style.width]="'35rem'" />
+
+<div>
+  <a (click)="start()" class="btn btn-xs btn-primary">
+    <span>restart</span>
+  </a>
+</div>
+<hr />
+<div *ngIf="loading">
+  <i class="fas fa-spinner fa-spin"></i>
+</div>
+<div [innerHTML]="message"></div>
