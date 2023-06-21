@@ -1,0 +1,246 @@
+<h3>Subjects</h3>
+
+<div class="description">I Subject sono Observables di tipo multicasting</div>
+<br />
+<strong>Unicast: </strong> Notifica il dato emesso ad un singolo subscriber<br />
+<strong>Multicast: </strong> Notifica il dato emesso a più subscriber<br />
+<hr />
+
+<h4>Differenza Observable e Subject</h4>
+
+<div class="description">
+  In questo esempio un Observable e un Subject emettono un numero random tra 1 e
+  10
+  <ul>
+    <li>
+      Si può notare che se istanzio due subscription all'observable riceveranno
+      2 valori diversi a seconda del momento in cui mi sottoscrivo
+    </li>
+    <li>
+      Mentre se istanzio due subscription per il subject entrambe riceveranno lo
+      stesso valore nel momento in cui viene emesso
+    </li>
+  </ul>
+</div>
+
+<div class="row mt-2">
+  <div class="col col-3">
+    <!-- prettier-ignore -->
+    <pre>
+      <code>
+        import &#123; Observable, Subject &#125; from 'rxjs';
+
+        const observable = new Observable((obj) =&gt;
+          obj.next(Math.floor(Math.random() * 10) + 1)
+        );
+
+        this.sub1 = observable.subscribe((data) =&gt; &#123;
+          this.message1 += '&lt;br/&gt;sub1 value: ' + data;
+        &#125;);
+
+        this.sub2 = observable.subscribe((data) =&gt; &#123;
+          this.message1 += '&lt;br/&gt;sub2 value: ' + data;
+        &#125;);
+
+      </code>
+    </pre>
+  </div>
+  <div class="col col-3">
+    <!-- prettier-ignore -->
+    <pre>
+      <code>
+        const subject = new Subject();
+
+        this.sub3 = subject.subscribe((data) =&gt; &#123;
+          this.message1 += '&lt;br/&gt;sub3 value: ' + data;
+        &#125;);
+
+        this.sub4 = subject.subscribe((data) =&gt; &#123;
+          this.message1 += '&lt;br/&gt;sub4 value: ' + data;
+        &#125;);
+
+        subject.next(Math.floor(Math.random() * 10) + 1);
+
+      </code>
+    </pre>
+  </div>
+  <div class="col col-3">
+    <button class="btn btn-xs btn-primary" (click)="call1()">START</button
+    ><br />
+    <button class="mt-1 btn btn-xs btn-warning" (click)="stop1()">STOP</button>
+  </div>
+  <div class="col col-3">
+    <span [innerHTML]="message1"></span>
+  </div>
+</div>
+
+<h4>Uso del Subject</h4>
+
+<p>
+  Un Subject è un <strong>Observable</strong> nel senso che è possibile
+  sottoscriversi
+</p>
+
+<pre>
+  <code>
+    const subject = new Subject();
+
+    this.sub = subject.subscribe((data) =&gt; &#123;
+      ...
+    &#125;);
+
+    subject.next(1); // emit
+  </code>
+</pre>
+
+<p>
+  Un Subject è un <strong>Observer</strong> nel senso che è possibile invocare
+  le callback next, error e complete. In questo caso è possibile usarlo anche
+  come observer di un observable
+</p>
+
+<pre>
+  <code>
+    const subject = new Subject();
+
+    subject.subscribe(&#123;
+      next: (v) => v + 1,
+    &#125;);
+
+    this.sub = from([1,2,3]).subscribe(subject);
+
+    // 1 + 1 = 2
+    // 2 + 1 = 3
+    // 3 + 1 = 4
+  </code>
+</pre>
+
+<h4>BehaviorSubject</h4>
+
+<div class="description">
+  A differenza del Subject che manda il valore emesso ad una sottoscrizione, Il
+  BehaviorSubject manda un primo valore anche quando non ci sia un next. Subito
+  dopo il next, le sottoscrizioni successive prenderanno l'ultimo emesso
+</div>
+
+<div class="row mt-2">
+  <div class="col col-4">
+    <pre>
+      <code>
+        const subject = new Subject();
+
+        subject.subscribe((data) =&gt; &#123;
+          // non riceve data fino a che non ci sia un next
+        &#125;);
+
+        const behaviorSubject = new BehaviorSubject(1);
+
+        behaviorSubject.subscribe((data) =&gt; &#123;
+          // riceve il valore 1 anche se non ci sia un next
+        &#125;);
+
+        behaviorSubject.next(2);
+
+        behaviorSubject.subscribe((data) =&gt; &#123;
+          // riceve il valore 2 perchè è l'ultimo emesso
+        &#125;);
+
+        behaviorSubject.next(3);
+        // il 3 lo ricevono entrambi
+      </code>
+    </pre>
+  </div>
+  <div class="col col-4">
+    <button class="btn btn-xs btn-primary" (click)="call2()">START</button
+    ><br />
+    <button class="mt-1 btn btn-xs btn-warning" (click)="stop2()">STOP</button>
+  </div>
+  <div class="col col-4">
+    <span [innerHTML]="message2"></span>
+  </div>
+</div>
+
+<h4>ReplaySubject</h4>
+
+<div class="description">
+  Non manda un valore iniziale se non c'è stata una next ma memorizza un tot di
+  emissione e le manda ai subscribers che si sottoscriveranno dopo le next
+</div>
+
+<div class="row mt-2">
+  <div class="col col-4">
+    <pre>
+      <code>
+        const replaySubject = new ReplaySubject(2);
+        // indico che il prossimo subscription deve riceve le ultime 2 next
+
+        replaySubject.subscribe((data) =&gt; &#123;
+          // non riceve data fino a che non ci sia un next
+        &#125;);
+
+        replaySubject.next(1);
+        replaySubject.next(2);
+        replaySubject.next(3);
+        replaySubject.next(4);
+
+        replaySubject.subscribe((data) =&gt; &#123;
+          // riceve le ultime 2 next
+        &#125;);
+
+        replaySubject.next(5);
+        // il 5 lo ricevono entrambi
+      </code>
+    </pre>
+  </div>
+  <div class="col col-4">
+    <button class="btn btn-xs btn-primary" (click)="call3()">START</button
+    ><br />
+    <button class="mt-1 btn btn-xs btn-warning" (click)="stop3()">STOP</button>
+  </div>
+  <div class="col col-4">
+    <span [innerHTML]="message3"></span>
+  </div>
+</div>
+
+<h4>AsyncSubject</h4>
+
+<div class="description">
+  Manda a tutti i subscribers l'ultimo valore emesso e solo quando il subject è
+  complete
+</div>
+
+<div class="row mt-2">
+  <div class="col col-4">
+    <pre>
+      <code>
+        const asyncSubject = new AsyncSubject();
+
+        asyncSubject.subscribe((data) =&gt; &#123;
+          // non riceve data fino a che non ci sia un complete
+        &#125;);
+
+        asyncSubject.next(1);
+        asyncSubject.next(2);
+        asyncSubject.next(3);
+        asyncSubject.next(4);
+
+        asyncSubject.subscribe((data) =&gt; &#123;
+          // non riceve data fino a che non ci sia un complete
+        &#125;);
+
+        asyncSubject.next(5);
+
+        asyncSubject.complete();
+        // entrambe le subscription ricevono 5
+      </code>
+    </pre>
+  </div>
+  <div class="col col-4">
+    <button class="btn btn-xs btn-primary" (click)="call4()">START</button
+    ><br />
+    <button class="mt-1 btn btn-xs btn-warning" (click)="stop4()">STOP</button>
+  </div>
+  <div class="col col-4">
+    <span [innerHTML]="message4"></span>
+  </div>
+</div>

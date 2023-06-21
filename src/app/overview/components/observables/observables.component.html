@@ -1,0 +1,197 @@
+<h3>Observables</h3>
+
+<div class="description">
+  rappresenta l'idea di una collezione invocabile, che potrà contenere eventi o
+  valori futuri
+</div>
+
+<hr />
+
+<p>Ci sono 2 strategie possibili in js per reperire dei dati</p>
+
+<table class="table mt-2">
+  <thead>
+    <th>Strategy</th>
+    <th>SINGLE</th>
+    <th>MULTIPLE</th>
+    <th>Description</th>
+    <th>Producer</th>
+    <th>Consumer</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Pull</strong></td>
+      <td>Function</td>
+      <td>Iterator</td>
+      <td>I dati vengono recepiti in maniera sincoran</td>
+      <td>
+        <strong>PASSIVO: </strong>Emette i dati solo quando vengono richiesti
+      </td>
+      <td><strong>ATTIVO: </strong>Decide quando richiedere i dati</td>
+    </tr>
+    <tr>
+      <td><strong>Push</strong></td>
+      <td>Promise</td>
+      <td>Observable</td>
+      <td>I dati vengono recepiti in maniera asincoran</td>
+      <td><strong>ATTIVO: </strong>Produce i dati con un proprio ritmo</td>
+      <td><strong>PASSIVO: </strong>Reagisce solo quando arrivano i dati</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Le differenze sono le seguenti</p>
+
+<table class="table mt-2">
+  <thead>
+    <th>Calcolo</th>
+    <th>Descrizione</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Function</strong></td>
+      <td>Ritorna quando invocato un singolo valore in maniera sincrona</td>
+    </tr>
+    <tr>
+      <td><strong>Iterator</strong></td>
+      <td>
+        Ritorna quando invocato da 0 a infiniti valori in maniera sincrona
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Promise</strong></td>
+      <td>Può o non ritornare un valore in maniera asincrona</td>
+    </tr>
+    <tr>
+      <td><strong>Observable</strong></td>
+      <td>
+        Può ritornare da 0 a infiniti valori in maniera asincrona dal momento in
+        cui viene invocato in poi
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>Differenza Observable e Function</h4>
+
+<div class="description">
+  In questo esempio un Observable emette subito 3 numeri e dopo un secondo ne
+  emette un quarto
+  <ul>
+    <li>
+      Si può notare che appena mi sottoscrivo all'observable ricevo 3 numeri
+    </li>
+    <li>Quando richiamo la funzione ricevo subito un numero</li>
+    <li>Dopo un secondo ricevo il quarto numero emesso dall'observable</li>
+  </ul>
+</div>
+
+<div class="row mt-2">
+  <div class="col col-3">
+    <!-- prettier-ignore -->
+    <pre>
+      <code>
+        import &#123; Observable &#125; from 'rxjs';
+
+        const foo = new Observable((subscriber) =&gt; &#123;
+          subscriber.next(42);
+          subscriber.next(100); // "return" another value
+          subscriber.next(200); // "return" yet another
+          setTimeout(() => &#123;
+            subscriber.next(300); // happens asynchronously
+          &#125;, 1000);
+        &#125;);
+      </code>
+    </pre>
+  </div>
+  <div class="col col-3">
+    <!-- prettier-ignore -->
+    <pre>
+      <code>
+        function foo() &#123;
+          return 42;
+          return 100; // not return
+        &#125;
+      </code>
+    </pre>
+  </div>
+  <div class="col col-3">
+    <button class="btn btn-xs btn-primary" (click)="callObsVsFun()">
+      START</button
+    ><br />
+    <button class="mt-1 btn btn-xs btn-warning" (click)="stopObsVsFun()">
+      STOP
+    </button>
+  </div>
+  <div class="col col-3">
+    <span [innerHTML]="message1"></span>
+  </div>
+</div>
+
+<h4>Differenza Observable e Promise</h4>
+
+<div class="description">
+  In questo esempio un Observable emette subito 3 numeri e dopo un secondo ne
+  emette un quarto, mentre una promise emette il valore 1 dopo mezzo secondo e
+  il valore 2 dopo un secondo
+  <ul>
+    <li>
+      Si può notare che appena mi sottoscrivo all'observable ricevo 3 numeri
+    </li>
+    <li>
+      Quando mi sottoscrivo alla promise ricevo dopo mezzo secondo il suo primo
+      numero emesso
+    </li>
+    <li>
+      Dopo un secondo ricevo il quarto numero emesso dall'observable ma non
+      ricevo il secondo emesso dalla promise che è già stata consumata
+    </li>
+  </ul>
+</div>
+
+<div class="row mt-2">
+  <div class="col col-3">
+    <!-- prettier-ignore -->
+    <pre>
+      <code>
+        import &#123; Observable &#125; from 'rxjs';
+
+        const foo = new Observable((subscriber) =&gt; &#123;
+          subscriber.next(42);
+          subscriber.next(100); // "return" another value
+          subscriber.next(200); // "return" yet another
+          setTimeout(() => &#123;
+            subscriber.next(300); // happens asynchronously
+          &#125;, 1000);
+        &#125;);
+      </code>
+    </pre>
+  </div>
+  <div class="col col-3">
+    <!-- prettier-ignore -->
+    <pre>
+      <code>
+        new Promise((resolve, reject) => &#123;
+          setTimeout(() => &#123;
+            resolve(1); // return this value asynchronously
+          &#125;, 500);
+
+          setTimeout(() => &#123;
+            resolve(2); // the promise will be closed
+          &#125;, 1000);
+        &#125;);
+      </code>
+    </pre>
+  </div>
+  <div class="col col-3">
+    <button class="btn btn-xs btn-primary" (click)="callObsVsProm()">
+      START</button
+    ><br />
+    <button class="mt-1 btn btn-xs btn-warning" (click)="stopObsVsProm()">
+      STOP
+    </button>
+  </div>
+  <div class="col col-3">
+    <span [innerHTML]="message2"></span>
+  </div>
+</div>
